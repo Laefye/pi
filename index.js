@@ -68,9 +68,13 @@ let stringify = (d) => {
 
 let pi = 0n;
 let step = 0;
+let stepIter = 0;
 
 let piOutput = document.querySelector('#pi');
 let stepOutput = document.querySelector('#step');
+let framerateOutput = document.querySelector('#framerate');
+let plusstepOutput = document.querySelector('#plusstep');
+let LOCK = 60;
 piOutput.innerText = pi.toString();
 
 let calculate = () => {
@@ -83,8 +87,19 @@ let calculate = () => {
     step++;
 }
 
-let iterate = () => {
-    for (let i = 0; i < 30; i++) {
+let de = 0;
+
+let iterate = (time) => {
+    let fps = 1 / ((time - de) / 1000);
+    if (fps < LOCK) {
+        stepIter--;
+    } else {
+        stepIter++;
+    }
+    framerateOutput.innerText = "Framerate: " + Math.floor(fps);
+    plusstepOutput.innerText = "+step: " + stepIter;
+    de = time;
+    for (let i = 0; i < stepIter; i++) {
         calculate();
     }
     piOutput.innerText = stringify(pi);
